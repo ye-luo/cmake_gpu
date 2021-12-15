@@ -16,3 +16,4 @@ set_source_files_properties(foo.hip.cpp PROPERTIES LANGUAGE HIP)
 
 target_link_libraries(foo PUBLIC roc::hipblas roc::rocsolver)
 add_executable(test_app main.cpp)
+target_link_libraries(test_app PUBLIC foo)
