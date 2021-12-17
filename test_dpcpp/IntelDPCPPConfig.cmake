@@ -227,13 +227,13 @@ endif()
 
 # Based on Compiler ID, add support for DPCPP
 if( "x${CMAKE_CXX_COMPILER_ID}" STREQUAL "xIntelLLVM")
-  set(SYCL_FLAGS "--dpcpp ${SYCL_FLAGS}")
+  list(PREPEND SYCL_FLAGS "--dpcpp")
 endif()
 
 # TODO verify if this is needed
 # Windows: Add Exception handling
 if(WIN32)
-  set(SYCL_FLAGS "${SYCL_FLAGS} /EHsc")
+  list(APPEND SYCL_FLAGS "/EHsc")
 endif()
 
 set(SYCL_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SYCL_FLAGS}")
