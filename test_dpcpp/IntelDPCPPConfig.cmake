@@ -2,7 +2,7 @@
 # file Copyright.txt or https://cmake.org/licensing for details.
 
 #[=======================================================================[.rst:
-MyIntelDPCPPConfig
+IntelDPCPPConfig
 -------
 
 DPCPP Library to verify DPCPP/SYCL compatability of CMAKE_CXX_COMPILER
@@ -13,7 +13,7 @@ Result Variables
 
 This will define the following variables:
 
-``MyIntelDPCPP_FOUND``
+``IntelDPCPP_FOUND``
   True if the system has the DPCPP library.
 ``SYCL_LANGUAGE_VERSION``
   The SYCL language spec version by Compiler.
@@ -52,7 +52,7 @@ The following cache variables may also be set:
 
   .. code-block:: cmake
 
-    find_package(MyIntelDPCPP REQUIRED)
+    find_package(IntelDPCPP REQUIRED)
 
 #]=======================================================================]
 
@@ -70,18 +70,18 @@ endif()
 
 string(COMPARE EQUAL "${CMAKE_CXX_COMPILER}" "" nocmplr)
 if(nocmplr)
-  set(MyIntelDPCPP_FOUND False)
+  set(IntelDPCPP_FOUND False)
   set(SYCL_REASON_FAILURE "SYCL: CMAKE_CXX_COMPILER not set!!")
-  set(MyIntelDPCPP_NOT_FOUND_MESSAGE "${SYCL_REASON_FAILURE}")
+  set(IntelDPCPP_NOT_FOUND_MESSAGE "${SYCL_REASON_FAILURE}")
 endif()
 
 # Check for known compiler family that supports SYCL
 
 if( NOT "x${CMAKE_CXX_COMPILER_ID}" STREQUAL "xClang" AND
     NOT "x${CMAKE_CXX_COMPILER_ID}" STREQUAL "xIntelLLVM")
-   set(MyIntelDPCPP_FOUND False)
+   set(IntelDPCPP_FOUND False)
    set(SYCL_REASON_FAILURE "Unsupported compiler family ${CMAKE_CXX_COMPILER_ID} and compiler ${CMAKE_CXX_COMPILER}!!")
-   set(MyIntelDPCPP_NOT_FOUND_MESSAGE "${SYCL_REASON_FAILURE}")
+   set(IntelDPCPP_NOT_FOUND_MESSAGE "${SYCL_REASON_FAILURE}")
    return()
 endif()
 
@@ -160,7 +160,7 @@ function(SYCL_FEATURE_TEST_RUN TEST_EXE)
 
   # Verify the test execution output.
   if(test_result)
-    set(MyIntelDPCPP_FOUND False)
+    set(IntelDPCPP_FOUND False)
     set(SYCL_REASON_FAILURE "SYCL: feature test execution failed!!")
   endif()
   # TODO: what iff the result is false.. error or ignore?
@@ -263,9 +263,9 @@ SYCL_FEATURE_TEST_EXTRACT(${test_output})
 # define macro  SYCL_LANGUAGE_VERSION
 string(COMPARE EQUAL "${SYCL_LANGUAGE_VERSION}" "" nosycllang)
 if(nosycllang)
-  set(MyIntelDPCPP_FOUND False)
+  set(IntelDPCPP_FOUND False)
   set(SYCL_REASON_FAILURE "SYCL: It appears that the ${CMAKE_CXX_COMPILER} does not support SYCL")
-  set(MyIntelDPCPP_NOT_FOUND_MESSAGE "${SYCL_REASON_FAILURE}")
+  set(IntelDPCPP_NOT_FOUND_MESSAGE "${SYCL_REASON_FAILURE}")
 endif()
 
 # Placeholder for identifying various implemenations of SYCL compilers.
@@ -288,8 +288,8 @@ message(STATUS "The SYCL Flags are ${SYCL_FLAGS}")
 message(STATUS "The SYCL Language Version is ${SYCL_LANGUAGE_VERSION}")
 
 find_package_handle_standard_args(
-  MyIntelDPCPP
-  FOUND_VAR MyIntelDPCPP_FOUND
+  IntelDPCPP
+  FOUND_VAR IntelDPCPP_FOUND
   REQUIRED_VARS SYCL_INCLUDE_DIR SYCL_LIBRARY_DIR SYCL_FLAGS SYCL_LIBRARY
   VERSION_VAR SYCL_LANGUAGE_VERSION
   REASON_FAILURE_MESSAGE "${SYCL_REASON_FAILURE}")
