@@ -1,0 +1,3 @@
+void abc_noomp()
+{
+}
