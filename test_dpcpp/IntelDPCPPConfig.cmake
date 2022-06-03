@@ -86,8 +86,16 @@ if( NOT "x${CMAKE_CXX_COMPILER_ID}" STREQUAL "xClang" AND
 endif()
 
 # Assume that CXX Compiler supports SYCL and then test to verify.
-set(SYCL_COMPILER ${CMAKE_CXX_COMPILER})
-
+# Due to MPI wrappers, CMAKE_CXX_COMPILER is not the best guess.
+if("x${CMAKE_CXX_COMPILER_ID}" STREQUAL "xIntelLLVM")
+  set(SYCL_COMPILER_GUESS icpx)
+elseif("x${CMAKE_CXX_COMPILER_ID}" STREQUAL "xClang")
+  set(SYCL_COMPILER_GUESS clang++)
+else()
+  set(SYCL_COMPILER_GUESS ${CMAKE_CXX_COMPILER})
+endif()
+# find out the full path.
+find_program(SYCL_COMPILER ${SYCL_COMPILER_GUESS})
 
 # Function to write a test case to verify SYCL features.
 
@@ -197,11 +205,11 @@ if(SYCL_COMPILER)
   get_filename_component(SYCL_PACKAGE_DIR "${SYCL_BIN_DIR}" DIRECTORY CACHE)
 
   # Find Include path from binary
-  find_file(SYCL_INCLUDE_DIR
+  find_path(SYCL_INCLUDE_DIR
     NAMES
-      include
+      CL/sycl.hpp
     HINTS
-      ${SYCL_PACKAGE_DIR}
+      ${SYCL_PACKAGE_DIR}/include/sycl
     NO_DEFAULT_PATH
       )
 
@@ -307,5 +315,5 @@ target_link_options(OneAPI::DPCPP-device INTERFACE ${SYCL_FLAGS})
 
 # sycl target for host APIs
 add_library(OneAPI::DPCPP-host INTERFACE IMPORTED)
-target_include_directories(OneAPI::DPCPP-host INTERFACE ${SYCL_INCLUDE_DIR})
+target_include_directories(OneAPI::DPCPP-host INTERFACE "${SYCL_INCLUDE_DIR};${SYCL_INCLUDE_DIR}/..")
 target_link_libraries(OneAPI::DPCPP-host INTERFACE ${SYCL_LIBRARY})
