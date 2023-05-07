@@ -1,0 +1,10 @@
+# CCE. C OK. Fortran broken
+mkdir build_cce; cd build_cce
+cmake -DCMAKE_C_COMPILER=cc -DCMAKE_Fortran_COMPILER=ftn ../src
+make -j32 -k
+cd ..
+
+# GNU. C, Fortran OK
+mkdir build_gnu; cd build_gnu
+cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_Fortran_COMPILER=gfortran ../src
+make -j32 -k
